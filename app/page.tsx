@@ -1,9 +1,7 @@
+import Header from "./_components/header";
+
 const Home = () => {
-  return (
-    <div className="bg-red-400 px-1">
-      <h1>Hello Tailwind</h1>
-    </div>
-  );
+  return <Header />;
 };
 
 export default Home;
