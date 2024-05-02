@@ -1,20 +1,15 @@
 "use client";
 
+import DeliveryInfo from "@/app/_components/delivery-info";
 import DiscontBadge from "@/app/_components/discount-badge";
 import ProductList from "@/app/_components/product-list";
 import { Button } from "@/app/_components/ui/button";
-import { Card } from "@/app/_components/ui/card";
 import {
   calculateProductTotalPrice,
   formatCurrency,
 } from "@/app/_helpers/price";
 import { Prisma } from "@prisma/client";
-import {
-  BikeIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  TimerIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -109,39 +104,7 @@ const ProductDetails = ({
         </div>
       </div>
 
-      {/*DADOS DA ENTREGA */}
-      <div className="px-5">
-        <Card className="mt-6 flex justify-around py-3">
-          {/*Custo de Entrega */}
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <span className="text-xs">Entrega</span>
-              <BikeIcon size={14} />
-            </div>
-
-            {Number(product.restaurant.deliveryFee) > 0 ? (
-              <p className="mt-1' text-xs font-semibold">
-                {formatCurrency(Number(product.restaurant.deliveryFee))}
-              </p>
-            ) : (
-              <p className="mt-1">Grátis</p>
-            )}
-          </div>
-
-          {/*Tempo de Entrega */}
-          <div className="flex flex-col items-center">
-            {/*Custo de Entrega */}
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <span className="text-xs">Entrega</span>
-              <TimerIcon size={14} />
-            </div>
-
-            <p className="mt-1 text-xs font-semibold">
-              {product.restaurant.deliveryTimeMinutes} min
-            </p>
-          </div>
-        </Card>
-      </div>
+      <DeliveryInfo restaurant={product.restaurant} />
 
       {/*SOBRE*/}
       <div className="mt-6 space-y-3 px-5">
