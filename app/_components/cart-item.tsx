@@ -26,8 +26,8 @@ const CartItem = ({ cartProduct }: CartItemProps) => {
 
   return (
     <div className="flex items-center justify-between">
+      {/*IMAGEM E INFO*/}
       <div className="flex items-center gap-4">
-        {/*IMAGEM E INFO*/}
         <div className="relative h-20 w-20">
           <Image
             src={cartProduct.imageUrl}

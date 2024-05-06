@@ -4,6 +4,16 @@ import Cart from "@/app/_components/cart";
 import DeliveryInfo from "@/app/_components/delivery-info";
 import DiscontBadge from "@/app/_components/discount-badge";
 import ProductList from "@/app/_components/product-list";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/app/_components/ui/alert-dialog";
 import { Button } from "@/app/_components/ui/button";
 import {
   Sheet,
@@ -38,15 +48,33 @@ const ProductDetails = ({
   product,
   complementaryProducts,
 }: ProductDetailProps) => {
-  const [quatity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+    useState(false);
   const { addProductToCart, products } = useContext(CartContext);
+
+  const addToCart = ({ emptyCart }: { emptyCart?: boolean }) => {
+    addProductToCart({ product, quantity, emptyCart });
+    setIsCartOpen(true);
+  };
 
   console.log(products);
 
   const handleAddToCartClick = () => {
-    addProductToCart(product, quatity);
-    setIsCartOpen(true);
+    //Verificar se há algum produto de outro Restaurante no carrinho, se houver
+    const hasDifferentRestaurantProduct = products.some(
+      (cartproduct) => cartproduct.restauranteId !== product.restauranteId,
+    );
+
+    //Abrir um aviso
+    if (hasDifferentRestaurantProduct) {
+      return setIsConfirmationDialogOpen(true);
+    }
+
+    addToCart({
+      emptyCart: true,
+    });
   };
 
   const handleIncreaseQuantityClick = () => setQuantity((prev) => prev + 1);
@@ -111,7 +139,7 @@ const ProductDetails = ({
               <ChevronLeftIcon />
             </Button>
 
-            <span className="w-4">{quatity}</span>
+            <span className="w-4">{quantity}</span>
 
             <Button size="icon" onClick={handleIncreaseQuantityClick}>
               <ChevronRightIcon />
@@ -155,6 +183,29 @@ const ProductDetails = ({
           <Cart />
         </SheetContent>
       </Sheet>
+
+      <AlertDialog
+        open={isConfirmationDialogOpen}
+        onOpenChange={setIsConfirmationDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Você só pode adicionar itens de um restaurante por vez!
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja mesmo adicionar esse produto? Isso limpará a sua sacola
+              atual.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={() => addToCart({ emptyCart: true })}>
+              Esvaziar sacola e adicionar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
