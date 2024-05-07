@@ -59,8 +59,6 @@ const ProductDetails = ({
     setIsCartOpen(true);
   };
 
-  console.log(products);
-
   const handleAddToCartClick = () => {
     //Verificar se há algum produto de outro Restaurante no carrinho, se houver
     const hasDifferentRestaurantProduct = products.some(
