@@ -23,8 +23,8 @@ import {
 } from "@/app/_components/ui/sheet";
 import { CartContext } from "@/app/_context/cart";
 import {
-  calculateProductTotalPrice,
   formatCurrency,
+  calculateProductTotalPrice,
 } from "@/app/_helpers/price";
 import { Prisma } from "@prisma/client";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
@@ -60,65 +60,66 @@ const ProductDetails = ({
   };
 
   const handleAddToCartClick = () => {
-    //Verificar se há algum produto de outro Restaurante no carrinho, se houver
+    // VERIFICAR SE HÁ ALGUM PRODUTO DE OUTRO RESTAURANTE NO CARRINHO
     const hasDifferentRestaurantProduct = products.some(
-      (cartproduct) => cartproduct.restauranteId !== product.restauranteId,
+      (cartProduct) => cartProduct.restaurantId !== product.restaurantId,
     );
 
-    //Abrir um aviso
+    // SE HOUVER, ABRIR UM AVISO
     if (hasDifferentRestaurantProduct) {
       return setIsConfirmationDialogOpen(true);
     }
 
     addToCart({
-      emptyCart: true,
+      emptyCart: false,
     });
   };
 
-  const handleIncreaseQuantityClick = () => setQuantity((prev) => prev + 1);
+  const handleIncreaseQuantityClick = () =>
+    setQuantity((currentState) => currentState + 1);
   const handleDecreaseQuantityClick = () =>
-    setQuantity((prev) => {
-      if (prev === 1) return 1;
+    setQuantity((currentState) => {
+      if (currentState === 1) return 1;
 
-      return prev - 1;
+      return currentState - 1;
     });
 
   return (
     <>
       <div className="relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5">
-        {/*Restaurante */}
+        {/* RESTAURANTE */}
         <div className="flex items-center gap-[0.375rem] px-5">
           <div className="relative h-6 w-6">
             <Image
               src={product.restaurant.imageUrl}
               alt={product.restaurant.name}
               fill
+              sizes="100%"
               className="rounded-full object-cover"
             />
           </div>
-
           <span className="text-xs text-muted-foreground">
             {product.restaurant.name}
           </span>
         </div>
 
-        {/* Nome do Produto */}
+        {/* NOME DO PRODUTO */}
         <h1 className="mb-2 mt-1 px-5 text-xl font-semibold">{product.name}</h1>
 
-        {/*Preço do produto e quantidade*/}
+        {/* PREÇO DO PRODUTO E QUANTIDADE */}
         <div className="flex justify-between px-5">
-          {/*PREÇO COM DESCONTO*/}
+          {/* PREÇO COM DESCONTO */}
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-semibold">
                 {formatCurrency(calculateProductTotalPrice(product))}
               </h2>
-
               {product.discountPercentage > 0 && (
                 <DiscontBadge product={product} />
               )}
             </div>
-            {/*PREÇO ORIGINAL */}
+
+            {/* PREÇO ORIGINAL */}
             {product.discountPercentage > 0 && (
               <p className="text-sm text-muted-foreground">
                 De: {formatCurrency(Number(product.price))}
@@ -126,7 +127,7 @@ const ProductDetails = ({
             )}
           </div>
 
-          {/* Quantidade */}
+          {/* QUANTIDADE */}
           <div className="flex items-center gap-3 text-center">
             <Button
               size="icon"
@@ -136,29 +137,24 @@ const ProductDetails = ({
             >
               <ChevronLeftIcon />
             </Button>
-
             <span className="w-4">{quantity}</span>
-
             <Button size="icon" onClick={handleIncreaseQuantityClick}>
               <ChevronRightIcon />
             </Button>
           </div>
         </div>
 
-        <DeliveryInfo restaurant={product.restaurant} />
+        <div className="px-5">
+          <DeliveryInfo restaurant={product.restaurant} />
+        </div>
 
-        {/*SOBRE*/}
         <div className="mt-6 space-y-3 px-5">
           <h3 className="font-semibold">Sobre</h3>
-
           <p className="text-sm text-muted-foreground">{product.description}</p>
         </div>
 
-        {/*SUCOS*/}
-
         <div className="mt-6 space-y-3">
           <h3 className="px-5 font-semibold">Sucos</h3>
-
           <ProductList products={complementaryProducts} />
         </div>
 
@@ -167,13 +163,13 @@ const ProductDetails = ({
             className="w-full font-semibold"
             onClick={handleAddToCartClick}
           >
-            Adicionar à Sacola
+            Adicionar à sacola
           </Button>
         </div>
       </div>
 
       <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
-        <SheetContent>
+        <SheetContent className="w-[90vw]">
           <SheetHeader>
             <SheetTitle className="text-left">Sacola</SheetTitle>
           </SheetHeader>
@@ -189,10 +185,10 @@ const ProductDetails = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Você só pode adicionar itens de um restaurante por vez!
+              Você só pode adicionar itens de um restaurante por vez
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Deseja mesmo adicionar esse produto? Isso limpará a sua sacola
+              Deseja mesmo adicionar esse produto? Isso limpará sua sacola
               atual.
             </AlertDialogDescription>
           </AlertDialogHeader>
