@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./_context/cart";
 import AuthProvider from "./_providers/auth";
+import { Toaster } from "./_components/ui/sonner";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <AuthProvider>
           <CartProvider>{children}</CartProvider>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>
