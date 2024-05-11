@@ -92,11 +92,13 @@ const Header = () => {
           <div className="space-y-2">
             <Button
               variant="ghost"
-              className="w-full justify-start space-x-3 rounded-full
-            text-sm font-normal"
+              className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
+              asChild
             >
-              <HomeIcon size={16} />
-              <span className="block">Inicio</span>
+              <Link href="/">
+                <HomeIcon size={16} />
+                <span className="block">Inicio</span>
+              </Link>
             </Button>
 
             {data?.user && (
@@ -113,14 +115,15 @@ const Header = () => {
                   </Link>
                 </Button>
 
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start space-x-3 rounded-full
-              text-sm font-normal"
-                >
-                  <HeartIcon size={16} />
-                  <span className="block">Restaurantes Favoritos</span>
-                </Button>
+                <Link href="/restaurants/recommended">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start space-x-3 rounded-full text-sm font-normal"
+                  >
+                    <HeartIcon size={16} />
+                    <span className="block">Restaurantes Favoritos</span>
+                  </Button>
+                </Link>
               </>
             )}
 

@@ -6,5 +6,5 @@ import { revalidatePath } from "next/cache";
 
 export const createOrder = async (data: Prisma.OrderCreateInput) => {
   revalidatePath("/my-orders");
-  return db.order.create({ data });
+  return await db.order.create({ data });
 };
